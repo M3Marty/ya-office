@@ -1,0 +1,24 @@
+plugins {
+    id 'java'
+}
+
+group 'org.m3m.office'
+version '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    version = '8'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+dependencies {
+    implementation 'org.apache.poi:poi-ooxml:5.2.3'
+    implementation 'org.apache.logging.log4j:log4j-api:2.20.0'
+    implementation 'org.apache.logging.log4j:log4j-core:2.20.0'
+}
