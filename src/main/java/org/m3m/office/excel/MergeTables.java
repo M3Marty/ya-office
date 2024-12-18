@@ -113,16 +113,17 @@ public class MergeTables {
 
 			while (it.hasNext()) {
 				Row row = it.next();
-				Cell key = row.getCell(column);
-
-				Optional<String> keyValue = Optional.ofNullable(key)
-						.map(Cell::getStringCellValue);
-				if (keyValue.isPresent() && !keyValue.get().isEmpty()) {
-					if (!subtable.isEmpty()) {
-						data.put(prevKeyValue, subtable.toArray(new String[subtable.size()][]));
-						subtable.clear();
+				Optional<Cell> key = Optional.of(row).map(r -> r.getCell(column));
+				if (key.isPresent() && key.get().getCellType() == CellType.STRING) {
+					Optional<String> keyValue = key.map(Cell::getStringCellValue);
+					if (keyValue.isPresent() && !keyValue.get().isEmpty()) {
+						if (!subtable.isEmpty()) {
+							data.put(prevKeyValue, subtable.toArray(
+									new String[subtable.size()][]));
+							subtable.clear();
+						}
+						prevKeyValue = keyValue.get();
 					}
-					prevKeyValue = keyValue.get();
 				}
 				subtable.add(readRow(row, column, copyLength));
 			}
